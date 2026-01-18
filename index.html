@@ -8,7 +8,7 @@
 <style>
 :root{
   --bg:#0b0b10;
-  --card:#15151c;
+  --panel:#14141b;
   --border:#24242c;
   --text:#f5f5f7;
   --muted:#9a9aa5;
@@ -21,39 +21,129 @@ body{
   background:var(--bg);
   color:var(--text);
 }
+a{text-decoration:none;color:inherit}
+
+/* HEADER */
 header{
-  position:sticky;top:0;z-index:10;
-  display:flex;justify-content:space-between;align-items:center;
+  position:sticky;
+  top:0;
+  z-index:10;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
   padding:18px 7%;
+  background:rgba(11,11,16,.85);
   border-bottom:1px solid var(--border);
-  background:rgba(11,11,16,.9);
   backdrop-filter:blur(10px);
 }
-header h1{font-size:18px;font-weight:600}
+header h1{
+  font-size:18px;
+  font-weight:600;
+}
 nav a{
   margin-left:22px;
   font-size:14px;
   color:var(--muted);
-  text-decoration:none;
 }
 nav a:hover{color:var(--text)}
+
+/* HERO */
 .hero{
+  padding:90px 7% 70px;
+  max-width:1100px;
+  margin:auto;
+}
+.hero-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:60px;
-  padding:90px 7%;
   align-items:center;
 }
 .hero img{
-  width:100%;max-width:420px;
+  width:100%;
+  max-width:420px;
   border-radius:22px;
   background:#222;
 }
-.hero h2{font-size:42px;margin:0 0 14px}
-.hero p{color:var(--muted);line-height:1.6;max-width:480px}
-.price{font-size:30px;margin:26px 0}
-.button{
-  padding:14px 30px;
+.hero h2{
+  font-size:42px;
+  margin:0 0 14px;
+}
+.hero p{
+  color:var(--muted);
+  line-height:1.65;
+  max-width:480px;
+}
+.price{
+  font-size:30px;
+  margin:26px 0;
+}
+
+/* SECTIONS */
+section{
+  padding:70px 7%;
+  max-width:1100px;
+  margin:auto;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:28px;
+}
+.card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:26px;
+}
+.card h3{
+  margin-top:0;
+  font-size:18px;
+}
+.card p{
+  color:var(--muted);
+  line-height:1.6;
+}
+
+/* REVIEWS */
+.reviews{display:grid;gap:32px}
+.review-meta{
+  font-size:13px;
+  color:var(--muted);
+  margin:6px 0 10px;
+}
+.stars{color:#ffd60a;font-size:14px}
+
+/* SIGN IN PAGE */
+.auth{
+  min-height:calc(100vh - 80px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.auth-box{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:36px;
+  width:100%;
+  max-width:420px;
+}
+.auth-box h2{
+  margin-top:0;
+}
+input{
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:#0f0f15;
+  color:var(--text);
+  margin-bottom:16px;
+}
+button{
+  width:100%;
+  padding:14px;
   border-radius:999px;
   border:none;
   background:var(--accent);
@@ -61,22 +151,8 @@ nav a:hover{color:var(--text)}
   font-size:15px;
   cursor:pointer;
 }
-section{padding:70px 7%}
-.features{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:28px;
-}
-.card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:20px;
-  padding:26px;
-}
-.card h3{margin-top:0}
-.card p{color:var(--muted);line-height:1.6}
-.reviews{display:grid;gap:26px}
-.stars{color:#ffd60a;font-size:14px;margin:6px 0}
+
+/* FOOTER */
 footer{
   border-top:1px solid var(--border);
   padding:40px;
@@ -85,36 +161,9 @@ footer{
   color:var(--muted);
 }
 
-/* MODALS */
-.overlay{
-  position:fixed;inset:0;
-  background:rgba(0,0,0,.6);
-  display:none;
-  justify-content:center;
-  align-items:center;
-  z-index:20;
-}
-.modal{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:22px;
-  padding:28px;
-  width:90%;
-  max-width:420px;
-}
-input{
-  width:100%;
-  padding:12px;
-  border-radius:12px;
-  border:1px solid var(--border);
-  background:#0f0f15;
-  color:var(--text);
-  margin-bottom:14px;
-}
-
 /* MOBILE */
 @media(max-width:900px){
-  .hero{grid-template-columns:1fr;text-align:center}
+  .hero-grid{grid-template-columns:1fr;text-align:center}
   .hero img{margin:auto}
 }
 </style>
@@ -124,162 +173,155 @@ input{
 
 <header>
   <h1>NovaPods</h1>
-  <nav>
-    <span id="userArea"></span>
-    <a href="#" onclick="openCart()">Cart</a>
-  </nav>
+  <nav id="nav"></nav>
 </header>
 
-<div class="hero">
-  <img src="https://dummyimage.com/800x800/1a1a1f/ffffff&text=NovaPods+Pro">
-  <div>
-    <h2>NovaPods Pro</h2>
-    <p>
-      Clean design, balanced sound, and reliable everyday performance.
-      Built for commuting, work calls, and long listening sessions.
+<!-- SIGN IN PAGE -->
+<div id="loginPage" class="auth" style="display:none">
+  <div class="auth-box">
+    <h2>Sign in</h2>
+    <p style="color:var(--muted);font-size:14px">
+      Use your email and password to continue.
     </p>
-    <div class="price">$129</div>
-    <button class="button" onclick="openCart()">Add to Cart</button>
+    <input id="email" placeholder="Email address">
+    <input id="password" type="password" placeholder="Password">
+    <button onclick="login()">Sign in</button>
   </div>
 </div>
 
-<section>
-  <div class="features">
-    <div class="card">
-      <h3>Active Noise Control</h3>
-      <p>Reduces background noise in busy environments without distorting audio.</p>
-    </div>
-    <div class="card">
-      <h3>24-Hour Battery</h3>
-      <p>Up to 6 hours per charge with multiple recharges from the case.</p>
-    </div>
-    <div class="card">
-      <h3>Instant Pairing</h3>
-      <p>Connects automatically when the case is opened.</p>
+<!-- MAIN CONTENT -->
+<div id="mainContent">
+
+  <div class="hero">
+    <div class="hero-grid">
+      <img src="https://dummyimage.com/800x800/1a1a1f/ffffff&text=NovaPods+Pro">
+      <div>
+        <h2>NovaPods Pro</h2>
+        <p>
+          NovaPods Pro are designed for people who just want earbuds that work
+          consistently. No gimmicks, no over-tuning — just reliable sound,
+          comfortable fit, and battery life you don’t have to think about.
+        </p>
+        <div class="price">$129</div>
+      </div>
     </div>
   </div>
-</section>
 
-<section id="reviews">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;">
-    <h2>Customer Reviews</h2>
-    <select id="sortReviews" onchange="renderReviews()" style="background:#15151c;color:#f5f5f7;border:1px solid #24242c;padding:8px 12px;border-radius:10px;">
-      <option value="recent">Most recent</option>
-      <option value="rating">Highest rated</option>
-    </select>
-  </div>
-  <div class="reviews" id="reviewsList"></div>
-</section>
+  <section>
+    <div class="grid">
+      <div class="card">
+        <h3>Noise Control</h3>
+        <p>
+          Reduces constant background noise like traffic or fans without making
+          everything sound artificial.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Battery Life</h3>
+        <p>
+          Easily lasts through a full workday. Case usually needs charging every
+          few days with normal use.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Comfort</h3>
+        <p>
+          Lightweight design that doesn’t cause ear fatigue, even during long
+          listening sessions.
+        </p>
+      </div>
+    </div>
+  </section>
 
-<footer>© 2026 NovaPods</footer>
+  <section>
+    <h2 style="margin-bottom:32px">Customer Reviews</h2>
 
-<!-- LOGIN -->
-<div class="overlay" id="loginModal">
-  <div class="modal">
-    <h3>Sign In</h3>
-    <input id="loginName" placeholder="Email or Username">
-    <input type="password" placeholder="Password">
-    <button class="button" style="width:100%" onclick="login()">Sign In</button>
-  </div>
+    <div class="reviews">
+      <div class="card">
+        <strong>Alex M.</strong>
+        <div class="review-meta">
+          <span class="stars">★★★★★</span> · Owned for 1 month · Reviewed 2 weeks ago
+        </div>
+        <p>
+          I originally bought these as a backup pair and ended up using them
+          more than my main earbuds. Sound is clean and predictable, which I
+          actually like. They don’t exaggerate bass, and vocals sound natural.
+          Battery life has been steady so far — no sudden drops.
+        </p>
+      </div>
+
+      <div class="card">
+        <strong>Jordan R.</strong>
+        <div class="review-meta">
+          <span class="stars">★★★★☆</span> · Owned for 3 weeks · Reviewed 9 days ago
+        </div>
+        <p>
+          Pairing was straightforward and connection has been stable with both
+          my phone and laptop. Noise control helps a lot in public spaces, but
+          louder sounds still come through. Fit is good, though I sometimes
+          adjust them after an hour or two.
+        </p>
+      </div>
+
+      <div class="card">
+        <strong>Sam T.</strong>
+        <div class="review-meta">
+          <span class="stars">★★★★★</span> · Owned for 2 months · Reviewed last week
+        </div>
+        <p>
+          I use these mostly for work calls and background music. Call quality
+          has been clear on both ends, and coworkers haven’t complained about
+          echo or noise. They feel well-built and don’t look flashy, which I
+          prefer.
+        </p>
+      </div>
+
+      <div class="card">
+        <strong>Emily K.</strong>
+        <div class="review-meta">
+          <span class="stars">★★★★☆</span> · Owned for 1 month · Reviewed 3 weeks ago
+        </div>
+        <p>
+          Comfortable enough to wear for a few hours at a time. I like that
+          they’re lightweight and don’t put pressure on my ears. Touch controls
+          take a little getting used to, but overall I’m happy with them.
+        </p>
+      </div>
+    </div>
+  </section>
+
 </div>
 
-<!-- CART / CHECKOUT -->
-<div class="overlay" id="cart">
-  <div class="modal">
-    <div class="checkout-step" id="step1">
-      <h3>Your Cart</h3>
-      <p>NovaPods Pro — $129</p>
-      <button class="button" style="width:100%" onclick="nextStep()">Checkout</button>
-    </div>
-
-    <div class="checkout-step" id="step2" style="display:none">
-      <h3>Shipping</h3>
-      <input placeholder="Full Name">
-      <input placeholder="Email">
-      <input placeholder="Address">
-      <button class="button" style="width:100%" onclick="nextStep()">Continue</button>
-    </div>
-
-    <div class="checkout-step" id="step3" style="display:none">
-      <h3>Payment</h3>
-      <input placeholder="Card Number">
-      <input placeholder="MM / YY">
-      <input placeholder="CVC">
-      <button class="button" style="width:100%" onclick="placeOrder()">Place Order</button>
-    </div>
-
-    <div class="checkout-step" id="step4" style="display:none;text-align:center">
-      <h3>Order Confirmed</h3>
-      <p style="color:var(--muted)">Confirmation sent to your email.</p>
-      <button class="button" style="width:100%" onclick="closeCart()">Done</button>
-    </div>
-  </div>
-</div>
+<footer>
+  © 2026 NovaPods
+</footer>
 
 <script>
-/* ACCOUNT */
-function updateUserUI(){
-  const user = localStorage.getItem("user");
-  document.getElementById("userArea").innerHTML = user
-    ? `<span style="color:#9a9aa5">Hi, ${user}</span> <a href="#" onclick="logout()">Logout</a>`
-    : `<a href="#" onclick="openLogin()">Sign In</a>`;
-}
-function openLogin(){document.getElementById("loginModal").style.display="flex"}
+/* AUTH */
 function login(){
-  const name=document.getElementById("loginName").value||"User";
-  localStorage.setItem("user",name);
-  document.getElementById("loginModal").style.display="none";
-  updateUserUI();
+  const email=document.getElementById("email").value;
+  if(!email)return;
+  localStorage.setItem("user",email);
+  render();
 }
 function logout(){
   localStorage.removeItem("user");
-  updateUserUI();
+  render();
 }
-updateUserUI();
-
-/* REVIEWS */
-const reviews=[
-  {name:"Alex M.",rating:5,date:"2026-01-02",text:"Used daily for commuting and workouts. They stay in place and sound consistent even at higher volume."},
-  {name:"Jordan R.",rating:4,date:"2025-12-28",text:"Noise control helps in cafés but doesn’t block everything. Comfortable overall."},
-  {name:"Sam T.",rating:5,date:"2025-12-18",text:"Great for work calls. People hear me clearly and connection has been solid."},
-  {name:"Chris D.",rating:4,date:"2025-12-10",text:"Good balance of bass and clarity. Touch controls are a bit sensitive."},
-  {name:"Emily K.",rating:5,date:"2025-12-05",text:"Lightweight and reliable with both my phone and laptop."}
-];
-function timeAgo(d){
-  const days=Math.floor((new Date()-new Date(d))/86400000);
-  if(days<1)return"Today";
-  if(days<7)return`${days} days ago`;
-  if(days<30)return`${Math.floor(days/7)} weeks ago`;
-  return`${Math.floor(days/30)} months ago`;
+function render(){
+  const user=localStorage.getItem("user");
+  document.getElementById("nav").innerHTML=user
+    ? `<span style="color:#9a9aa5;font-size:14px">${user}</span>
+       <a href="#" onclick="logout()">Sign out</a>`
+    : `<a href="#" onclick="showLogin()">Sign in</a>`;
+  document.getElementById("loginPage").style.display=user?"none":"flex";
+  document.getElementById("mainContent").style.display=user?"block":"none";
 }
-function renderReviews(){
-  const sort=document.getElementById("sortReviews").value;
-  const list=document.getElementById("reviewsList");
-  list.innerHTML="";
-  [...reviews].sort((a,b)=>sort==="rating"?b.rating-a.rating:new Date(b.date)-new Date(a.date))
-  .forEach(r=>{
-    list.innerHTML+=`
-      <div class="card">
-        <strong>${r.name}</strong>
-        <div class="stars">${"★".repeat(r.rating)}${"☆".repeat(5-r.rating)}</div>
-        <p style="font-size:13px;color:#9a9aa5">Reviewed ${timeAgo(r.date)}</p>
-        <p>${r.text}</p>
-      </div>`;
-  });
+function showLogin(){
+  document.getElementById("loginPage").style.display="flex";
+  document.getElementById("mainContent").style.display="none";
 }
-renderReviews();
-
-/* CHECKOUT */
-let step=1;
-function openCart(){document.getElementById("cart").style.display="flex";showStep(1)}
-function closeCart(){document.getElementById("cart").style.display="none"}
-function showStep(n){
-  step=n;
-  document.querySelectorAll(".checkout-step").forEach(s=>s.style.display="none");
-  document.getElementById("step"+n).style.display="block";
-}
-function nextStep(){showStep(step+1)}
-function placeOrder(){setTimeout(()=>showStep(4),1200)}
+render();
 </script>
 
 </body>
