@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>NovaPods Pro</title>
+<title>NovaPods</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
@@ -21,25 +21,18 @@ body{
   background:var(--bg);
   color:var(--text);
 }
-a{text-decoration:none;color:inherit}
+a{color:inherit;text-decoration:none}
 
 /* HEADER */
 header{
-  position:sticky;
-  top:0;
-  z-index:10;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+  position:sticky;top:0;z-index:10;
+  display:flex;justify-content:space-between;align-items:center;
   padding:18px 7%;
-  background:rgba(11,11,16,.85);
+  background:rgba(11,11,16,.9);
   border-bottom:1px solid var(--border);
   backdrop-filter:blur(10px);
 }
-header h1{
-  font-size:18px;
-  font-weight:600;
-}
+header h1{font-size:18px;font-weight:600}
 nav a{
   margin-left:22px;
   font-size:14px;
@@ -47,90 +40,68 @@ nav a{
 }
 nav a:hover{color:var(--text)}
 
-/* HERO */
-.hero{
-  padding:90px 7% 70px;
-  max-width:1100px;
+/* LAYOUT */
+.page{
+  max-width:1150px;
   margin:auto;
+  padding:60px 7%;
 }
-.hero-grid{
+.hidden{display:none}
+
+/* PRODUCT GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:26px;
+}
+.product{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:20px;
+  cursor:pointer;
+  transition:transform .15s ease;
+}
+.product:hover{transform:translateY(-4px)}
+.product img{
+  width:100%;
+  border-radius:14px;
+  margin-bottom:14px;
+}
+.product h3{margin:0;font-size:16px}
+.price{color:var(--muted);margin-top:6px}
+
+/* PRODUCT PAGE */
+.product-page{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:60px;
-  align-items:center;
 }
-.hero img{
+.product-page img{
   width:100%;
-  max-width:420px;
   border-radius:22px;
-  background:#222;
 }
-.hero h2{
-  font-size:42px;
-  margin:0 0 14px;
-}
-.hero p{
-  color:var(--muted);
-  line-height:1.65;
-  max-width:480px;
-}
-.price{
-  font-size:30px;
-  margin:26px 0;
-}
-
-/* SECTIONS */
-section{
-  padding:70px 7%;
-  max-width:1100px;
-  margin:auto;
-}
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:28px;
+.section{
+  margin-top:60px;
 }
 .card{
   background:var(--panel);
   border:1px solid var(--border);
   border-radius:20px;
-  padding:26px;
+  padding:24px;
 }
-.card h3{
-  margin-top:0;
-  font-size:18px;
-}
-.card p{
-  color:var(--muted);
-  line-height:1.6;
-}
-
-/* REVIEWS */
-.reviews{display:grid;gap:32px}
-.review-meta{
-  font-size:13px;
-  color:var(--muted);
-  margin:6px 0 10px;
-}
+.reviews{display:grid;gap:26px}
 .stars{color:#ffd60a;font-size:14px}
+.meta{font-size:13px;color:var(--muted);margin:6px 0 10px}
 
-/* SIGN IN PAGE */
-.auth{
-  min-height:calc(100vh - 80px);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
+/* AUTH */
 .auth-box{
+  max-width:420px;
+  margin:80px auto;
   background:var(--panel);
   border:1px solid var(--border);
   border-radius:24px;
   padding:36px;
-  width:100%;
-  max-width:420px;
-}
-.auth-box h2{
-  margin-top:0;
 }
 input{
   width:100%;
@@ -152,19 +123,11 @@ button{
   cursor:pointer;
 }
 
-/* FOOTER */
-footer{
-  border-top:1px solid var(--border);
-  padding:40px;
-  text-align:center;
-  font-size:13px;
-  color:var(--muted);
-}
+/* PROFILE */
+.profile p{color:var(--muted)}
 
-/* MOBILE */
 @media(max-width:900px){
-  .hero-grid{grid-template-columns:1fr;text-align:center}
-  .hero img{margin:auto}
+  .product-page{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -172,156 +135,159 @@ footer{
 <body>
 
 <header>
-  <h1>NovaPods</h1>
+  <h1><a href="#" onclick="showHome()">NovaPods</a></h1>
   <nav id="nav"></nav>
 </header>
 
-<!-- SIGN IN PAGE -->
-<div id="loginPage" class="auth" style="display:none">
+<!-- HOME -->
+<div id="home" class="page">
+  <h2 style="margin-bottom:30px">Products</h2>
+  <div class="grid" id="productGrid"></div>
+</div>
+
+<!-- PRODUCT DETAIL -->
+<div id="productView" class="page hidden"></div>
+
+<!-- SIGN IN -->
+<div id="login" class="hidden">
   <div class="auth-box">
     <h2>Sign in</h2>
-    <p style="color:var(--muted);font-size:14px">
-      Use your email and password to continue.
-    </p>
-    <input id="email" placeholder="Email address">
-    <input id="password" type="password" placeholder="Password">
+    <input id="email" placeholder="Email">
+    <input type="password" placeholder="Password">
     <button onclick="login()">Sign in</button>
   </div>
 </div>
 
-<!-- MAIN CONTENT -->
-<div id="mainContent">
-
-  <div class="hero">
-    <div class="hero-grid">
-      <img src="https://dummyimage.com/800x800/1a1a1f/ffffff&text=NovaPods+Pro">
-      <div>
-        <h2>NovaPods Pro</h2>
-        <p>
-          NovaPods Pro are designed for people who just want earbuds that work
-          consistently. No gimmicks, no over-tuning — just reliable sound,
-          comfortable fit, and battery life you don’t have to think about.
-        </p>
-        <div class="price">$129</div>
-      </div>
-    </div>
-  </div>
-
-  <section>
-    <div class="grid">
-      <div class="card">
-        <h3>Noise Control</h3>
-        <p>
-          Reduces constant background noise like traffic or fans without making
-          everything sound artificial.
-        </p>
-      </div>
-      <div class="card">
-        <h3>Battery Life</h3>
-        <p>
-          Easily lasts through a full workday. Case usually needs charging every
-          few days with normal use.
-        </p>
-      </div>
-      <div class="card">
-        <h3>Comfort</h3>
-        <p>
-          Lightweight design that doesn’t cause ear fatigue, even during long
-          listening sessions.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <h2 style="margin-bottom:32px">Customer Reviews</h2>
-
-    <div class="reviews">
-      <div class="card">
-        <strong>Alex M.</strong>
-        <div class="review-meta">
-          <span class="stars">★★★★★</span> · Owned for 1 month · Reviewed 2 weeks ago
-        </div>
-        <p>
-          I originally bought these as a backup pair and ended up using them
-          more than my main earbuds. Sound is clean and predictable, which I
-          actually like. They don’t exaggerate bass, and vocals sound natural.
-          Battery life has been steady so far — no sudden drops.
-        </p>
-      </div>
-
-      <div class="card">
-        <strong>Jordan R.</strong>
-        <div class="review-meta">
-          <span class="stars">★★★★☆</span> · Owned for 3 weeks · Reviewed 9 days ago
-        </div>
-        <p>
-          Pairing was straightforward and connection has been stable with both
-          my phone and laptop. Noise control helps a lot in public spaces, but
-          louder sounds still come through. Fit is good, though I sometimes
-          adjust them after an hour or two.
-        </p>
-      </div>
-
-      <div class="card">
-        <strong>Sam T.</strong>
-        <div class="review-meta">
-          <span class="stars">★★★★★</span> · Owned for 2 months · Reviewed last week
-        </div>
-        <p>
-          I use these mostly for work calls and background music. Call quality
-          has been clear on both ends, and coworkers haven’t complained about
-          echo or noise. They feel well-built and don’t look flashy, which I
-          prefer.
-        </p>
-      </div>
-
-      <div class="card">
-        <strong>Emily K.</strong>
-        <div class="review-meta">
-          <span class="stars">★★★★☆</span> · Owned for 1 month · Reviewed 3 weeks ago
-        </div>
-        <p>
-          Comfortable enough to wear for a few hours at a time. I like that
-          they’re lightweight and don’t put pressure on my ears. Touch controls
-          take a little getting used to, but overall I’m happy with them.
-        </p>
-      </div>
-    </div>
-  </section>
-
+<!-- PROFILE -->
+<div id="profile" class="page hidden profile">
+  <h2>Account</h2>
+  <p id="profileEmail"></p>
+  <p id="profileDate"></p>
+  <button onclick="logout()" style="max-width:220px">Sign out</button>
 </div>
 
-<footer>
-  © 2026 NovaPods
-</footer>
-
 <script>
-/* AUTH */
+/* USER */
+function updateNav(){
+  const user=JSON.parse(localStorage.getItem("user"));
+  document.getElementById("nav").innerHTML=user
+    ? `<a href="#" onclick="showProfile()">Account</a>`
+    : `<a href="#" onclick="showLogin()">Sign in</a>`;
+}
 function login(){
   const email=document.getElementById("email").value;
   if(!email)return;
-  localStorage.setItem("user",email);
-  render();
+  localStorage.setItem("user",JSON.stringify({
+    email,
+    joined:new Date().toDateString()
+  }));
+  showHome();updateNav();
 }
 function logout(){
   localStorage.removeItem("user");
-  render();
+  showHome();updateNav();
 }
-function render(){
-  const user=localStorage.getItem("user");
-  document.getElementById("nav").innerHTML=user
-    ? `<span style="color:#9a9aa5;font-size:14px">${user}</span>
-       <a href="#" onclick="logout()">Sign out</a>`
-    : `<a href="#" onclick="showLogin()">Sign in</a>`;
-  document.getElementById("loginPage").style.display=user?"none":"flex";
-  document.getElementById("mainContent").style.display=user?"block":"none";
+function showLogin(){hideAll();document.getElementById("login").classList.remove("hidden")}
+function showProfile(){
+  const user=JSON.parse(localStorage.getItem("user"));
+  if(!user){showLogin();return;}
+  hideAll();
+  document.getElementById("profile").classList.remove("hidden");
+  document.getElementById("profileEmail").textContent="Email: "+user.email;
+  document.getElementById("profileDate").textContent="Joined: "+user.joined;
 }
-function showLogin(){
-  document.getElementById("loginPage").style.display="flex";
-  document.getElementById("mainContent").style.display="none";
+
+/* PRODUCTS (EDIT / ADD HERE) */
+const products=[
+{
+  id:1,
+  name:"NovaPods Pro",
+  price:"$129",
+  img:"https://dummyimage.com/800x800/1a1a1f/ffffff&text=NovaPods+Pro",
+  desc:"Balanced sound, comfortable fit, and reliable daily performance.",
+  reviews:[
+    ["Alex M.",5,"Owned 1 month","Clear sound and consistent battery. Use them daily for commuting."],
+    ["Jordan R.",4,"Owned 3 weeks","Comfortable but I adjust them after long sessions."],
+    ["Emily K.",5,"Owned 2 months","Reliable pairing and lightweight."]
+  ]
+},
+{
+  id:2,
+  name:"NovaPods Air",
+  price:"$99",
+  img:"https://dummyimage.com/800x800/1a1a1f/ffffff&text=NovaPods+Air",
+  desc:"Lightweight earbuds designed for casual listening and calls.",
+  reviews:[
+    ["Chris D.",4,"Owned 1 month","Good for podcasts and calls. Bass is lighter."],
+    ["Sam T.",5,"Owned 2 weeks","Very comfortable and simple."],
+  ]
+},
+{
+  id:3,
+  name:"NovaPods Max",
+  price:"$149",
+  img:"https://dummyimage.com/800x800/1a1a1f/ffffff&text=NovaPods+Max",
+  desc:"Stronger bass and enhanced noise control for immersive listening.",
+  reviews:[
+    ["Ryan L.",5,"Owned 1 month","Bass is noticeably stronger. Good for travel."],
+    ["Mia S.",4,"Owned 3 weeks","Noise control helps a lot on flights."]
+  ]
 }
-render();
+];
+
+function renderProducts(){
+  const grid=document.getElementById("productGrid");
+  grid.innerHTML="";
+  products.forEach(p=>{
+    grid.innerHTML+=`
+      <div class="product" onclick="openProduct(${p.id})">
+        <img src="${p.img}">
+        <h3>${p.name}</h3>
+        <div class="price">${p.price}</div>
+      </div>`;
+  });
+}
+
+function openProduct(id){
+  const p=products.find(x=>x.id===id);
+  hideAll();
+  const view=document.getElementById("productView");
+  view.classList.remove("hidden");
+  view.innerHTML=`
+    <div class="product-page">
+      <img src="${p.img}">
+      <div>
+        <h2>${p.name}</h2>
+        <p style="color:var(--muted)">${p.desc}</p>
+        <div style="font-size:26px;margin-top:20px">${p.price}</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3 style="margin-bottom:24px">Customer Reviews</h3>
+      <div class="reviews">
+        ${p.reviews.map(r=>`
+          <div class="card">
+            <strong>${r[0]}</strong>
+            <div class="meta"><span class="stars">${"★".repeat(r[1])}${"☆".repeat(5-r[1])}</span> · ${r[2]}</div>
+            <p>${r[3]}</p>
+          </div>`).join("")}
+      </div>
+    </div>`;
+}
+
+function hideAll(){
+  ["home","productView","login","profile"].forEach(id=>{
+    document.getElementById(id).classList.add("hidden");
+  });
+}
+function showHome(){
+  hideAll();
+  document.getElementById("home").classList.remove("hidden");
+}
+
+renderProducts();
+updateNav();
 </script>
 
 </body>
